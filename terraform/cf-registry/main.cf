@@ -1,0 +1,42 @@
+terraform {
+  required_providers {
+    codefresh = {
+      source = "codefresh-io/codefresh"
+      version = "0.0.20"
+    }
+  }
+
+provider "codefresh" {
+  api_url = var.api_url
+  token   = var.token
+}
+
+variable api_url {
+  type = string
+  default = ""
+}
+
+variable token {
+  type    = string
+  default = ""
+}
+
+
+
+
+data "codefresh_registry" "dockerhub" {
+  name = "dockerhub"
+}
+
+resource "codefresh_registry" "dockerhub1" {
+  name              = "dockerhub1"
+  primary           = !data.codefresh_registry.dockerhub.primary
+  depends_on        = [codefresh_registry.gar]
+  spec {
+    dockerhub {
+      username = var.docker_username
+      password = var.docker_token
+    }
+  }
+  fallback_registry = data.codefresh_registry.dockerhub.id
+}

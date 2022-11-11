@@ -1,0 +1,152 @@
+version: '1.0'
+kind: pipeline
+metadata:
+  name: DemoWorkflows/test
+  project: DemoWorkflows
+  projectId: 63602b0e2604960a2026f4e7
+  revision: 27
+  accountId: 61fbdb9f9928ca2293a93f0b
+  created_at: '2022-11-01T20:19:30.386Z'
+  updated_at: '2022-11-09T03:37:49.494Z'
+  shortName: test
+  deprecate: {}
+  originalYamlString: |+
+    # More examples of Codefresh YAML can be found at
+    # https://codefresh.io/docs/docs/yaml-examples/examples/
+
+    version: "1.0"
+    # Stages can help you organize your steps in stages
+    stages:
+      - "clone"
+      - "build"
+      - "test"
+
+    steps:
+      clone-test:
+        title: "Cloning repository"
+        type: "git-clone"
+        repo: "cf-charizard/docker-anchor-grype"
+        # CF_BRANCH value is auto set when pipeline is triggered
+        # Learn more at codefresh.io/docs/docs/codefresh-yaml/variables/
+        revision: "${{CF_BRANCH}}"
+        git: "codefresh-contrib"
+        stage: "clone"
+
+      build:
+        title: "Building Docker image"
+        type: "build"
+        image_name: "salesdemosa/synk"
+        working_directory: "${{clone-test}}"
+        tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
+        tags: 
+          - "latest"
+        registry: salesdemosa
+        dockerfile: "docker-snyk"
+        stage: "build"
+
+      test:
+        title: "Running test"
+        type: "freestyle" # Run any command
+        image: "salesdemosa/synk" # The image in which command will be executed
+        working_directory: "${{clone-test}}" # Running command where code cloned
+        commands:
+          - "snyk auth ${{SNYK_TOKEN}}" 
+          - "snyk container test "
+        stage: "test"
+
+  id: 63617f5240b87eb1d10d2196
+spec:
+  triggers:
+    - name: codefresh-contrib/express-microservice2
+      type: git
+      repo: codefresh-contrib/express-microservice2
+      events:
+        - push.heads
+      pullRequestAllowForkEvents: false
+      commentRegex: /.*/gi
+      branchRegex: /.*/gi
+      branchRegexInput: regex
+      provider: github
+      disabled: false
+      options:
+        noCache: false
+        noCfCache: false
+        resetVolume: false
+      verified: true
+      context: codefresh-contrib
+      contexts: []
+      variables: []
+      lastExecutionDate: '2022-11-11T14:57:45.046Z'
+      status: verified
+      id: 63617f5340b87ecb910d2197
+      endpoint: 'https://g.codefresh.io/api/providers/github/hook/AKCsLlwD2c'
+      secret: ZCLiQTn16Y0jO8a1
+    - name: multi
+      type: git
+      repo: codefresh-contrib/example-multiservice2
+      events:
+        - push.heads
+      pullRequestAllowForkEvents: false
+      commentRegex: /.*/gi
+      branchRegex: /.*/gi
+      branchRegexInput: regex
+      provider: github
+      disabled: false
+      options:
+        noCache: false
+        noCfCache: false
+        resetVolume: false
+      verified: true
+      context: codefresh-contrib
+      contexts: []
+      variables: []
+      status: verified
+      lastExecutionDate: '2022-11-11T17:12:58.753Z'
+      id: 636b01d16fceed8a33b88b47
+      endpoint: 'https://g.codefresh.io/api/providers/github/hook/sp0OGSfqdm'
+      secret: 8CjECXnXMHETmpfl
+  stages:
+    - clone
+    - build
+    - test
+  variables:
+    - key: SNYK_TOKEN
+      value: 984d51ab-586d-4269-8014-a01699819564
+      encrypted: false
+  contexts: []
+  debug:
+    steps:
+      test:
+        phases:
+          before: false
+          override: true
+          after: false
+  steps:
+    clone-test:
+      title: Cloning repository
+      type: git-clone
+      repo: cf-charizard/docker-anchor-grype
+      revision: '${{CF_BRANCH}}'
+      git: codefresh-contrib
+      stage: clone
+    build:
+      title: Building Docker image
+      type: build
+      image_name: salesdemosa/synk
+      working_directory: '${{clone-test}}'
+      tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+      tags:
+        - latest
+      registry: salesdemosa
+      dockerfile: docker-snyk
+      stage: build
+    test:
+      title: Running test
+      type: freestyle
+      image: salesdemosa/synk
+      working_directory: '${{clone-test}}'
+      commands:
+        - 'snyk auth ${{SNYK_TOKEN}}'
+        - 'snyk container test '
+      stage: test
+

@@ -1,0 +1,46 @@
+{
+  "version": 4,
+  "terraform_version": "1.0.10",
+  "serial": 17,
+  "lineage": "8e2808f0-243d-314f-b8dc-e3135476da70",
+  "outputs": {},
+  "resources": [
+    {
+      "mode": "managed",
+      "type": "codefresh_registry",
+      "name": "dockerhub",
+      "provider": "provider[\"registry.terraform.io/codefresh-io/codefresh\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "default": false,
+            "fallback_registry": "",
+            "id": "617ccaf5a6bbb8f872fcdfc8",
+            "kind": "standard",
+            "name": "dockerhub",
+            "primary": true,
+            "spec": [
+              {
+                "acr": [],
+                "bintray": [],
+                "dockerhub": [
+                  {
+                    "password": "5d00bbca-969a-473e-9206-df0278797b72",
+                    "username": "anthonycodefresh"
+                  }
+                ],
+                "ecr": [],
+                "gar": [],
+                "gcr": [],
+                "other": []
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA=="
+        }
+      ]
+    }
+  ]
+}
